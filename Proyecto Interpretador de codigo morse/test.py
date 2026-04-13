@@ -1,10 +1,6 @@
-"""
-=============================================================
-  MORSE MASTER - Juego de Código Morse para 2 Jugadores
-  Interfaz completa en Python Tkinter Avanzado
-=============================================================
-"""
-
+#=====================================================================================================
+# Zona de importacion de librerias para la creacion de nuesto proyecto
+#=====================================================================================================
 import tkinter as tk
 from tkinter import ttk, messagebox, font
 import random
@@ -12,11 +8,9 @@ import time
 import threading
 import json
 import math
-
-
-# ─────────────────────────────────────────────
-#  CÓDIGO MORSE
-# ─────────────────────────────────────────────
+#=====================================================================================================
+# Abecedario de la representacion de las letras en codigo morse y funciones de conversion y puntuacion
+#=====================================================================================================
 MORSE_CODE = {
     'A': '.-',   'B': '-...', 'C': '-.-.', 'D': '-..',
     'E': '.',    'F': '..-.', 'G': '--.',  'H': '....',
@@ -31,14 +25,18 @@ MORSE_CODE = {
     ' ': '/'
 }
 MORSE_REVERSE = {v: k for k, v in MORSE_CODE.items()}
-
+#=================================================================================================================
+# Funcion de conversion del texto hacia traduccion de Codigo Morse 
+#=================================================================================================================
 def text_to_morse(text):
     result = []
     for ch in text.upper():
         if ch in MORSE_CODE:
             result.append(MORSE_CODE[ch])
-    return ' '.join(result)
-
+    return ' '.join(result)    
+#=================================================================================================================
+# Funcion de Codigo Morse a texto 
+#=================================================================================================================
 def morse_to_text(morse):
     words = morse.strip().split(' / ')
     result = ''
@@ -48,7 +46,9 @@ def morse_to_text(morse):
             result += MORSE_REVERSE.get(c, '?')
         result += ' '
     return result.strip()
-
+#=================================================================================================================
+# Funcion de puntaje de las letras correctas en morse
+#=================================================================================================================
 def score_morse(original, attempt):
     """Score based on character matching"""
     original = original.upper().strip()
@@ -57,17 +57,16 @@ def score_morse(original, attempt):
         return 0
     correct = sum(a == b for a, b in zip(original, attempt))
     return int((correct / len(original)) * 100)
+#===================================================================================================
+# Base de Colores utilizados para nuestra interfaz e juego 
+#===================================================================================================
 
-
-# ─────────────────────────────────────────────
-#  PALETA & ESTILOS
-# ─────────────────────────────────────────────
 BG_DARK    = "#0A0E1A"
 BG_PANEL   = "#111827"
 BG_CARD    = "#1A2235"
-ACCENT1    = "#00FFD1"   # cyan neón
-ACCENT2    = "#FF6B35"   # naranja
-ACCENT3    = "#FFD700"   # dorado
+ACCENT1    = "#00FFD1"   
+ACCENT2    = "#FF6B35"   
+ACCENT3    = "#FFD700"   
 TEXT_PRI   = "#E8EAED"
 TEXT_SEC   = "#8892A4"
 DOT_COLOR  = "#00FFD1"
@@ -76,17 +75,17 @@ LED_ON     = "#FFD700"
 LED_OFF    = "#1E2A3A"
 RED_COLOR  = "#FF4757"
 GREEN_COLOR= "#2ED573"
-
+#======================================================================================================
+# Frases a utilizar o frases alatorias
+#======================================================================================================
 FRASES_DEFAULT = [
     "SOS", "SI", "NO", "HOLA MUNDO",
     "CODIGO MORSE", "JUEGO", "AYUDA",
     "BIEN HECHO", "INTENTA MAS", "PERFECTO"
 ]
-
-
-# ─────────────────────────────────────────────
-#  VENTANA PRINCIPAL
-# ─────────────────────────────────────────────
+#========================================================================================================
+# Clase principal de nuestro juego de intepretacion de codigo morse
+#=========================================================================================================
 class MorseGame(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -111,6 +110,9 @@ class MorseGame(tk.Tk):
         self._build_ui()
         self._animate_leds_idle()
 
+#================================================================================================================
+# Funcion de creacion de fuentes para nuestra interfaz ademas de agregar algunas caracteristicas de esto mismo
+#================================================================================================================
     def _build_fonts(self):
         self.font_title  = font.Font(family="Courier New", size=22, weight="bold")
         self.font_sub    = font.Font(family="Courier New", size=13, weight="bold")
@@ -120,12 +122,14 @@ class MorseGame(tk.Tk):
         self.font_small  = font.Font(family="Courier New", size=9)
         self.font_btn    = font.Font(family="Courier New", size=11, weight="bold")
 
-    # ── CONSTRUCCIÓN UI ──────────────────────
+#===========================================================================================================================================
+# Funcion de creacion de la interfaz grafica de nuestro juego, ademas de agregar las caracteristicas de cada una de las pestañas y botones
+#============================================================================================================================================
     def _build_ui(self):
         # Header
         hdr = tk.Frame(self, bg=BG_DARK)
         hdr.pack(fill=tk.X, padx=20, pady=(12,0))
-        tk.Label(hdr, text="◈  MORSE MASTER  ◈", font=self.font_title,
+        tk.Label(hdr, text="STRANGER TEC", font=self.font_title,
                  bg=BG_DARK, fg=ACCENT1).pack(side=tk.LEFT)
         tk.Label(hdr, text="Juego de Código Morse · 2 Jugadores",
                  font=self.font_small, bg=BG_DARK, fg=TEXT_SEC).pack(side=tk.LEFT, padx=16)
@@ -165,15 +169,15 @@ class MorseGame(tk.Tk):
         self._build_tab_maqueta()
         self._build_tab_frases()
         self._build_tab_referencia()
-
+#================================================================================================================
     def _draw_sep(self, c):
         c.update_idletasks()
         w = c.winfo_width()
         c.create_line(0, 1, w, 1, fill=ACCENT1, width=1)
 
-    # ══════════════════════════════════════════
-    #  TAB 1 — CONFIGURACIÓN
-    # ══════════════════════════════════════════
+#====================================================================================================================================================
+# Funcion de creacion de tarjetas para organizar los elementos dentro de la interfaz, ademas de agregar algunas caracteristicas a estas tarjetas
+#====================================================================================================================================================
     def _build_tab_config(self):
         p = self.tab_config
         tk.Label(p, text="CONFIGURACIÓN DE PARTIDA", font=self.font_sub,
@@ -269,9 +273,9 @@ class MorseGame(tk.Tk):
         btn_frame.pack(pady=18)
         self._neon_btn(btn_frame, "▶  INICIAR PARTIDA", ACCENT1, self._iniciar_juego).pack()
 
-    # ══════════════════════════════════════════
-    #  TAB 2 — JUEGO PRINCIPAL
-    # ══════════════════════════════════════════
+#================================================================================================================================================================================
+# Funcion de creacion de la interfaz grafica de nuestro juego, ademas de agregar las caracteristicas de cada una de las pestañas y botones, en este caso para la pestaña del juego
+#===============================================================================================================================================================================
     def _build_tab_juego(self):
         p = self.tab_juego
 
@@ -326,6 +330,9 @@ class MorseGame(tk.Tk):
         self._neon_btn(btn_row, "⚡  REPRODUCIR MORSE", ACCENT3, self._reproducir_morse).pack(side=tk.LEFT, padx=8)
         self._neon_btn(btn_row, "✔  EVALUAR RONDA", GREEN_COLOR, self._evaluar_ronda).pack(side=tk.LEFT, padx=8)
         self._neon_btn(btn_row, "↺  REINICIAR", ACCENT2, self._reiniciar).pack(side=tk.LEFT, padx=8)
+#================================================================================================================
+#Funcion de la creacion de la interfaz grafica de nuestro juego, ademas de agregar las caracteristicas de cada una de las pestañas y botones, en este caso para los paneles de cada jugador
+#================================================================================================================
 
     def _build_player_panel(self, parent, jugador):
         color = ACCENT1 if jugador == "A" else ACCENT2
@@ -397,10 +404,9 @@ class MorseGame(tk.Tk):
 
         # Bind actualización en tiempo real
         entry.bind("<KeyRelease>", lambda e, j=jugador: self._update_decoded(j))
-
-    # ══════════════════════════════════════════
-    #  TAB 3 — MAQUETA (Simulador LEDs)
-    # ══════════════════════════════════════════
+#================================================================================================================
+#Funcion de la creacion de la interfaz grafica de nuestro juego, ademas de agregar las caracteristicas de cada una de las pestañas y botones, en este caso para la pestaña de la maqueta
+#================================================================================================================
     def _build_tab_maqueta(self):
         p = self.tab_maqueta
         tk.Label(p, text="SIMULADOR DE MAQUETA", font=self.font_sub,
@@ -494,10 +500,9 @@ class MorseGame(tk.Tk):
                   bg="#4A1515", fg=RED_COLOR, relief=tk.FLAT,
                   width=9, height=3,
                   command=self._sim_borrar).pack(side=tk.LEFT, padx=8)
-
-    # ══════════════════════════════════════════
-    #  TAB 4 — GESTIÓN DE FRASES
-    # ══════════════════════════════════════════
+#=================================================================================================================================================
+# Funcion de creacion de las frases a utilizar en nuestro juego para que nuestro usario pueda practicar la interpretacion de codigo morse
+#=================================================================================================================================================
     def _build_tab_frases(self):
         p = self.tab_frases
         tk.Label(p, text="LISTA DE FRASES", font=self.font_sub,
@@ -559,10 +564,9 @@ class MorseGame(tk.Tk):
             if ch != ' ':
                 tabla.insert(tk.END, f"  {ch}  →  {code}\n")
         tabla.config(state=tk.DISABLED)
-
-    # ══════════════════════════════════════════
-    #  TAB 5 — REFERENCIA MORSE
-    # ══════════════════════════════════════════
+#=================================================================================================================
+# Funcion de creacion de las referencias del codigo morse para que nuestro usuario pueda consultar cada una de las letras y numeros con su respectiva representacion en codigo morse
+#================================================================================================================
     def _build_tab_referencia(self):
         p = self.tab_ref
         tk.Label(p, text="REFERENCIA DE CÓDIGO MORSE", font=self.font_sub,
@@ -619,7 +623,9 @@ class MorseGame(tk.Tk):
                      bg=BG_CARD, fg=TEXT_SEC).pack()
 
         canvas.bind_all("<MouseWheel>", lambda e: canvas.yview_scroll(-1*(e.delta//120), "units"))
-
+#=================================================================================================================
+# Funcion de creacion de las representaciones visuales de los puntos y rayas del codigo morse para la pestaña de referencia, ademas de agregar algunas caracteristicas a estas representaciones
+#==================================================================================================================
     def _render_morse_dots(self, parent, code):
         for sym in code:
             if sym == '.':
@@ -633,15 +639,15 @@ class MorseGame(tk.Tk):
                 c.create_rectangle(1,4,25,8, fill=DASH_COLOR, outline="")
                 c.pack(side=tk.LEFT, padx=1)
 
-    # ══════════════════════════════════════════
-    #  LÓGICA DEL JUEGO
-    # ══════════════════════════════════════════
+#=================================================================================================================
+# Funcion de iniciar nuestro juego, esta funcion se encarga de reiniciar los puntajes, seleccionar una nueva frase aleatoria de la lista de frases y actualizar la interfaz para mostrar la nueva frase y el código morse correspondiente, ademas de configurar el turno del jugador A para que comience la partida
+#=================================================================================================================
     def _iniciar_juego(self):
         self.puntaje = {"A": 0, "B": 0}
         self.rondas  = 0
         self._nueva_frase()
         self.nb.select(1)
-
+# Carga de nueva frase y actualización de interfaz
     def _nueva_frase(self):
         if not self.frases:
             messagebox.showwarning("Sin frases", "Agrega frases en la pestaña FRASES.")
@@ -659,7 +665,7 @@ class MorseGame(tk.Tk):
         self.score_lbl_a.config(text="Puntaje: —")
         self.score_lbl_b.config(text="Puntaje: —")
         self._set_turno(1)
-
+# Configuración de turno
     def _set_turno(self, t):
         self.turno = t
         if t == 1:
@@ -670,7 +676,7 @@ class MorseGame(tk.Tk):
             self.lbl_turno.config(text="Turno: JUGADOR B")
             self.turno_lbl_a.config(text="⬤ EN ESPERA",    fg=TEXT_SEC)
             self.turno_lbl_b.config(text="⬤ TURNO ACTIVO", fg=GREEN_COLOR)
-
+# Actualización de decodificación en tiempo real
     def _update_decoded(self, jugador):
         entry = self.entry_a if jugador == "A" else self.entry_b
         label = self.decoded_a if jugador == "A" else self.decoded_b
@@ -680,11 +686,11 @@ class MorseGame(tk.Tk):
         except:
             decoded = "?"
         label.config(text=decoded if decoded else "—")
-
+# Simulación botones jugador A
     def _insert_morse(self, entry, sym):
         entry.insert(tk.END, sym)
         self._update_decoded("A")
-
+# Simulación botones jugador B
     def _evaluar_ronda(self):
         if not self.frase_actual:
             messagebox.showinfo("Info", "Primero inicia una partida.")
@@ -716,7 +722,7 @@ class MorseGame(tk.Tk):
                f"Puntos acumulados:\n"
                f"  A: {self.puntaje['A']}  |  B: {self.puntaje['B']}")
         messagebox.showinfo("Resultado de la Ronda", msg)
-
+# Función para reiniciar el juego y limpiar todos los puntajes, rondas, frases y entradas para comenzar una nueva partida desde cero
     def _reiniciar(self):
         self.puntaje = {"A": 0, "B": 0}
         self.rondas  = 0
@@ -733,16 +739,16 @@ class MorseGame(tk.Tk):
         self.score_lbl_b.config(text="Puntaje: —")
         self.lbl_turno.config(text="Turno: —")
 
-    # ══════════════════════════════════════════
-    #  REPRODUCCIÓN MORSE (Visual)
-    # ══════════════════════════════════════════
+#==================================================================================================================
+# Función para reproducir el código morse de la frase actual utilizando una animación visual en el canvas y simulando el encendido de LEDs, esta función se ejecuta en un hilo separado para no bloquear la interfaz mientras se reproduce el morse
+#==================================================================================================================
     def _reproducir_morse(self):
         if not self.frase_actual:
             messagebox.showinfo("Info", "Primero selecciona una frase.")
             return
         t = threading.Thread(target=self._play_morse_thread, daemon=True)
         t.start()
-
+# Función que se ejecuta en un hilo separado para reproducir el código morse de la frase actual, esta función se encarga de convertir la frase a morse, mostrar una animación visual en el canvas y simular el encendido de LEDs para representar los puntos y rayas del código morse
     def _play_morse_thread(self):
         unit = 0.2 if self.velocidad.get() == "A" else 0.3
         morse = text_to_morse(self.frase_actual)
@@ -775,15 +781,15 @@ class MorseGame(tk.Tk):
                     x += w + 4
             x += int(3 * unit * 60)
         self.lbl_morse_visual.config(text="✔ Reproducción completada")
-
+# Funciones para simular el encendido y apagado de los LEDs en la pestaña de maqueta, estas funciones se utilizan durante la reproducción del código morse para representar visualmente los puntos y rayas del código morse
     def _led_on(self):
         for c, oval, num in self.led_canvas_list:
             c.itemconfig(oval, fill=LED_ON)
-
+# Función para apagar todos los LEDs, esta función se utiliza para simular el apagado de los LEDs después de mostrar cada punto o raya durante la reproducción del código morse
     def _led_off(self):
         for c, oval, num in self.led_canvas_list:
             c.itemconfig(oval, fill=LED_OFF)
-
+# Función para mostrar un número específico en los LEDs, esta función se utiliza para representar visualmente los números del 0 al 9 utilizando los primeros 4 LEDs, donde cada LED representa un bit del número en formato binario
     def _mostrar_numero_led(self, n):
         bits = f"{n:04b}"
         self.lbl_num_led.config(text=str(n))
@@ -793,9 +799,8 @@ class MorseGame(tk.Tk):
                 c.itemconfig(oval, fill=LED_ON if on else LED_OFF)
             else:
                 c.itemconfig(oval, fill=LED_OFF)
-
+# Función para animar los LEDs en estado idle, esta función muestra una animación suave que recorre los LEDs encendiéndolos uno por uno y luego apagándolos, esta función se puede activar para mostrar una animación visual cuando no hay una partida activa
     def _animate_leds_idle(self):
-        """Animación suave al idle"""
         def tick(idx=0):
             for i, (c, oval, num) in enumerate(self.led_canvas_list):
                 dist = abs(i - idx % 16)
@@ -807,25 +812,25 @@ class MorseGame(tk.Tk):
         # Solo mostrar idle si no hay partida activa
         # tick()  # Descomenta para activar animación idle
 
-    # ══════════════════════════════════════════
-    #  SIMULADOR BOTONES JUGADOR B
-    # ══════════════════════════════════════════
+#==================================================================================================================
+# Funciones para simular la entrada de código morse utilizando los botones en la pestaña de maqueta, estas funciones se encargan de insertar el símbolo correspondiente en el campo de texto del jugador B y actualizar la decodificación en tiempo real para mostrar el texto decodificado a medida que se ingresan los símbolos
+#==================================================================================================================
     def _sim_boton(self, sym):
         self.entry_b.insert(tk.END, sym)
         self._update_decoded("B")
-
+# Función para simular el borrado de la entrada de código morse del jugador B, esta función se utiliza para limpiar el campo de texto del jugador B y restablecer la decodificación a su estado inicial
     def _sim_borrar(self):
         self.entry_b.delete("1.0", tk.END)
         self.decoded_b.config(text="—")
 
-    # ══════════════════════════════════════════
-    #  FRASES
-    # ══════════════════════════════════════════
+ #===================================================================================================================
+ # Funciones para gestionar la lista de frases disponibles en el juego, estas funciones permiten agregar nuevas frases, eliminar frases seleccionadas y restaurar la lista de frases a su estado predeterminado, además de actualizar la interfaz para reflejar los cambios en la lista de frases   
+ #===================================================================================================================
     def _refresh_listbox(self):
         self.listbox_frases.delete(0, tk.END)
         for i, f in enumerate(self.frases, 1):
             self.listbox_frases.insert(tk.END, f"  {i:2}.  {f}")
-
+# Función para mostrar una vista previa del código morse de la nueva frase que se está ingresando en el campo de texto, esta función se activa cada vez que se suelta una tecla en el campo de texto y muestra la representación en código morse de los primeros 16 caracteres de la frase ingresada
     def _preview_morse(self, _=None):
         txt = self.entry_nueva_frase.get().strip()
         if txt:
@@ -833,7 +838,7 @@ class MorseGame(tk.Tk):
             self.lbl_preview_morse.config(text=f"Morse:\n{m}")
         else:
             self.lbl_preview_morse.config(text="Morse: —")
-
+# Función para agregar una nueva frase a la lista de frases disponibles, esta función se activa al presionar el botón de agregar y verifica que la frase ingresada no esté vacía, no exceda los 16 caracteres y que no se haya alcanzado el límite de 10 frases antes de agregarla a la lista y actualizar la interfaz
     def _agregar_frase(self):
         txt = self.entry_nueva_frase.get().strip().upper()
         if not txt:
@@ -847,7 +852,7 @@ class MorseGame(tk.Tk):
         self.frases.append(txt)
         self._refresh_listbox()
         self.entry_nueva_frase.delete(0, tk.END)
-
+# Función para eliminar la frase seleccionada en la lista de frases, esta función se activa al presionar el botón de eliminar y verifica que se haya seleccionado una frase antes de eliminarla de la lista y actualizar la interfaz
     def _eliminar_frase(self):
         sel = self.listbox_frases.curselection()
         if not sel:
@@ -855,14 +860,12 @@ class MorseGame(tk.Tk):
         idx = sel[0]
         del self.frases[idx]
         self._refresh_listbox()
-
+# Función para restaurar la lista de frases a su estado predeterminado, esta función se activa al presionar el botón de restaurar y restablece la lista de frases a las frases predeterminadas definidas en el código, además de actualizar la interfaz para reflejar los cambios
     def _restaurar_frases(self):
         self.frases = list(FRASES_DEFAULT)
         self._refresh_listbox()
 
-    # ══════════════════════════════════════════
-    #  HELPERS UI
-    # ══════════════════════════════════════════
+# Función para crear un "card" o panel con un título, esta función se utiliza para crear secciones visuales en la interfaz con un fondo oscuro y un borde de acento, además de mostrar un título en la parte superior del panel para identificar su contenido
     def _card(self, parent, title):
         frame = tk.Frame(parent, bg=BG_CARD,
                          highlightbackground=ACCENT1,
@@ -879,11 +882,9 @@ class MorseGame(tk.Tk):
                         highlightbackground=color, highlightthickness=1,
                         command=command)
         return btn
-
-
-# ─────────────────────────────────────────────
-#  MAIN
-# ─────────────────────────────────────────────
+# ==================================================================================================================
+# Función principal para iniciar la aplicación, esta función crea una instancia de la clase MorseGame y ejecuta el bucle principal de la interfaz gráfica para mostrar la ventana del juego y permitir la interacción del usuario con las diferentes pestañas y funcionalidades del juego
+# ==================================================================================================================
 if __name__ == "__main__":
     app = MorseGame()
     app.mainloop()
