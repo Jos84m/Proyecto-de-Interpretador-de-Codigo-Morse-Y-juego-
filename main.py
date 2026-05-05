@@ -33,12 +33,10 @@ class Ventana_Principal(tk.Tk):
                                 bg="#F8F8F8")                          # Configura el fondo del canvas con el mismo color que la ventana para mantener la coherencia visual y resaltar los elementos gráficos y texto que se dibujarán encima
         self.canvas.pack(fill=tk.BOTH, expand=True)                      # Empaca el canvas para que ocupe todo el espacio disponible en la ventana de bienvenida, 
         script_dir = os.path.dirname(os.path.abspath(__file__))          # Obtiene el directorio del script actual para construir la ruta al GIF animado de fondo, asegurando que se pueda cargar correctamente 
-
 # Carga de frames del foindo del GIF animado                       ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        GIF_PATH = os.path.join(script_dir,"mmm.gif")             # Construye la ruta completa al GIF animado de fondo utilizando el directorio del script actual
+        GIF_PATH = os.path.join(script_dir,"mmm.gif")              # Construye la ruta completa al GIF animado de fondo utilizando el directorio del script actual
         self.gif_frames = []                                       # Lista para almacenar los frames del GIF animado de fondo, que se cargarán y escalarán para su uso en la pantalla de bienvenida
         self.gif_index  = 0                                        # Índice para controlar el frame actual del GIF animado de fondo durante la animación en la pantalla de bienvenida
-                                                   
         try:                                                                    
                                                                    # Intentar con Pillow para mejor manejo y escalado
             img = Image.open(GIF_PATH)                             # Abre el GIF animado de fondo utilizando Pillow
@@ -74,23 +72,22 @@ class Ventana_Principal(tk.Tk):
             self._animate_gif()
         else:
             self._draw_fallback_bg()
-
 # Fondo semitransparente para resaltar el texto--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         self.canvas.create_rectangle(0, 0, 900, 560,
-                                     fill="#0A0E1A",
-                                     stipple="gray50",   # semitransparente
+                                     fill="#000000",
+                                     stipple="gray50",   
                                      outline="")
 # Ttulo de nuestra pantalla de bienvenida-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         self.canvas.create_text(450, 140,
                                 text="STRANGER TEC",
                                 font=("Courier New", 48, "bold"),
-                                fill="#00FFD1",
+                                fill="#FFFFFF",
                                 anchor=tk.CENTER)
 # Titulo de nuestro juego en la pantalla de bienvenida-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         self.canvas.create_text(450, 200,
                                 text="by Josh y Alison",
                                 font=("Courier New", 28, "bold"),
-                                fill="#FFD700",
+                                fill="#FFFFFF",
                                 anchor=tk.CENTER)
 # Subtitulo de nuestro juego en la pantalla de bienvenida -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         self.canvas.create_text(450, 245,
@@ -100,7 +97,7 @@ class Ventana_Principal(tk.Tk):
                                 anchor=tk.CENTER)
 # Línea decorativa debajo del subtitulo----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         self.canvas.create_line(200, 275, 700, 275,
-                                fill="#00FFD1", width=1)
+                                fill="#000000", width=1)
 # Descripción breve de nuestro juego en la pantalla de bienvenida-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         self.canvas.create_text(450, 310,
                                 text="Aprende y practica el código Morse\ncompitiendo con otro jugador en tiempo real",
@@ -110,7 +107,7 @@ class Ventana_Principal(tk.Tk):
                                 justify=tk.CENTER)
 # Marco para el botón-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         btn_frame = tk.Frame(self.canvas, bg="#111827",
-                             highlightbackground="#00FFD1",
+                             highlightbackground="#FFFFFF",
                              highlightthickness=2)
 # Colocación del botón en el canvas-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
         btn_window = self.canvas.create_window(450, 400,
@@ -154,7 +151,7 @@ class Ventana_Principal(tk.Tk):
             self.canvas.itemconfig(self.gif_item,
                                    image=self.gif_frames[self.gif_index])
             self.gif_index = (self.gif_index + 1) % len(self.gif_frames)
-            self.after(50, self._animate_gif)   # ~20 fps
+            self.after(50, self._animate_gif)   
 #=============================================================================================================================================================================================================================================
 # Fucncion en caso de no encontrar el Gif animado para evitar un fondo extraño o vacio.
 #=============================================================================================================================================================================================================================================
@@ -177,10 +174,10 @@ class Ventana_Principal(tk.Tk):
 #=============================================================================================================================================================================================================================================
     def _animate_morse_text(self):
         frases_morse = [
-            "... --- ...",          # SOS
-            "-- --- .-. ... .",     # MORSE
-            ".--- ..- . --. ---",   # JUEGO
-            "-... .. . -.",         # BIEN
+            "... --- ...",         
+            "-- --- .-. ... .",     
+            ".--- ..- . --. ---",   
+            "-... .. . -.",         
         ]
         idx = getattr(self, "_morse_anim_idx", 0)
         self.canvas.itemconfig(self.morse_text, text=frases_morse[idx % len(frases_morse)])
@@ -190,7 +187,6 @@ class Ventana_Principal(tk.Tk):
 # Funcion de lanzamiento del juego, cierra la pantalla de bienvenida y abre la ventana principal del juego.
 #=============================================================================================================================================================================================================================================
     def _launch_game(self):
-        """Cierra el splash y abre la ventana principal del juego."""
         self.destroy()
         app = MorseGame()
         app.mainloop()
@@ -208,7 +204,7 @@ MORSE_CODE = {
     '0': '-----','1': '.----','2': '..---','3': '...--',
     '4': '....-','5': '.....','6': '-....','7': '--...',
     '8': '---..',  '9': '----.',
-    ' ': '/'
+    ' ': '/','+': '.-.-.', '-': '-....-' 
 }
 MORSE_REVERSE = {v: k for k, v in MORSE_CODE.items()}
 #=============================================================================================================================================================================================================================================
@@ -248,12 +244,12 @@ def score_morse(original, attempt):
 BG_DARK    = "#0A0E1A"
 BG_PANEL   = "#111827"
 BG_CARD    = "#1A2235"
-ACCENT1    = "#00FFD1"   
+ACCENT1    = "#F5F5F5"   
 ACCENT2    = "#FF6B35"   
 ACCENT3    = "#FFD700"   
 TEXT_PRI   = "#E8EAED"
 TEXT_SEC   = "#8892A4"
-DOT_COLOR  = "#00FFD1"
+DOT_COLOR  = "#F3F3F3"
 DASH_COLOR = "#FF6B35"
 LED_ON     = "#FFD700"
 LED_OFF    = "#1E2A3A"
@@ -264,8 +260,8 @@ GREEN_COLOR= "#2ED573"
 #==================================================================================================================================================================================================================================
 FRASES_DEFAULT = [
     "SOS", "SI", "NO", "HOLA MUNDO",
-    "CODIGO MORSE", "JUEGO", "AYUDA",
-    "BIEN HECHO", "INTENTA MAS", "PERFECTO"
+    "ADDIOS", "JUEGO", "AYUDA",
+    "BIEN HECHO", "TEC", "PERFECTO"
 ]
 #====================================================================================================================================================================================================================================
 # Clase principal de nuestro juego de intepretacion de codigo morse
@@ -277,7 +273,6 @@ class MorseGame(tk.Tk):
         self.geometry("1200x780")
         self.resizable(True, True)
         self.configure(bg=BG_DARK)
-        # Estado global
         self.frases       = list(FRASES_DEFAULT)
         self.frase_actual = ""
         self.modo_juego   = tk.StringVar(value="escucha")   
@@ -379,8 +374,8 @@ class MorseGame(tk.Tk):
         card2 = self._card(outer, "VELOCIDAD (UNIDAD BASE)")
         card2.pack(side=tk.LEFT, padx=18, pady=8, fill=tk.Y)
         for lbl, val, desc in [
-            ("Unidad A  —  0.2 seg", "A", "Rápido"),
-            ("Unidad B  —  0.3 seg", "B", "Normal"),
+            ("Unidad A  —  30.0 seg", "A", "Rápido"),
+            ("Unidad B  —  60.0  seg", "B", "Normal"),
         ]:
             tk.Radiobutton(card2, text=lbl,
                            variable=self.velocidad, value=val,
@@ -460,7 +455,7 @@ class MorseGame(tk.Tk):
         frase_card = self._card(p, "FRASE ACTUAL")
         frase_card.pack(fill=tk.X, padx=16, pady=4)
 
-        self.lbl_frase = tk.Label(frase_card, text="— Presiona INICIAR —",
+        self.lbl_frase = tk.Label(frase_card, text="Presiona INICIAR",
                                    font=self.font_big, bg=BG_CARD, fg=ACCENT3)
         self.lbl_frase.pack(pady=10)
 
@@ -497,7 +492,7 @@ class MorseGame(tk.Tk):
         color = ACCENT1 if jugador == "A" else ACCENT2
 
         # Indicador de turno activo
-        turno_lbl = tk.Label(parent, text="⬤ EN ESPERA",
+        turno_lbl = tk.Label(parent, text="EN ESPERA",
                              font=self.font_small, bg=BG_CARD, fg=TEXT_SEC)
         turno_lbl.pack(pady=(4,2))
         if jugador == "A":
@@ -721,7 +716,7 @@ class MorseGame(tk.Tk):
                 tabla.insert(tk.END, f"  {ch}  →  {code}\n")
         tabla.config(state=tk.DISABLED)
 #========================================================================================================================================================================================================================================================================================================================================================================
-# Funcion de creacion de las referencias del codigo morse para que nuestro usuario pueda consultar cada una de las letras y numeros con su respectiva representacion en codigo morse
+# Funcion de creacion de las referencias del codigo morse — ACTUALIZADA con sección de caracteres especiales (+ y -)
 #========================================================================================================================================================================================================================================================================================================================================================================
     def _build_tab_referencia(self):
         p = self.tab_ref
@@ -738,9 +733,12 @@ class MorseGame(tk.Tk):
         canvas.configure(yscrollcommand=scroll.set)
         canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scroll.pack(side=tk.RIGHT, fill=tk.Y)
-        letters = [(ch, MORSE_CODE[ch]) for ch in sorted(MORSE_CODE) if ch.isalpha()]
-        digits  = [(ch, MORSE_CODE[ch]) for ch in sorted(MORSE_CODE) if ch.isdigit()]
 
+        letters  = [(ch, MORSE_CODE[ch]) for ch in sorted(MORSE_CODE) if ch.isalpha()]
+        digits   = [(ch, MORSE_CODE[ch]) for ch in sorted(MORSE_CODE) if ch.isdigit()]
+        specials = [(ch, MORSE_CODE[ch]) for ch in ['+', '-'] if ch in MORSE_CODE]
+
+        # ── Letras ──
         tk.Label(inner, text="LETRAS", font=self.font_sub,
                  bg=BG_DARK, fg=ACCENT1).grid(row=0, column=0, columnspan=7,
                                                pady=8, sticky=tk.W, padx=8)
@@ -755,6 +753,8 @@ class MorseGame(tk.Tk):
             self._render_morse_dots(dots_frame, code)
             tk.Label(cell, text=code, font=self.font_small,
                      bg=BG_CARD, fg=TEXT_SEC).pack()
+
+        # ── Números ──
         row_offset = (len(letters) // 7) + 2
         tk.Label(inner, text="NÚMEROS", font=self.font_sub,
                  bg=BG_DARK, fg=ACCENT2).grid(row=row_offset, column=0,
@@ -770,7 +770,26 @@ class MorseGame(tk.Tk):
             dots_frame.pack()
             self._render_morse_dots(dots_frame, code)
             tk.Label(cell, text=code, font=self.font_small,
-                     bg=BG_CARD, fg=TEXT_SEC).pack
+                     bg=BG_CARD, fg=TEXT_SEC).pack()
+
+        # ── Caracteres Especiales (+ y -) ──
+        row_offset2 = row_offset + (len(digits) // 7) + 2
+        tk.Label(inner, text="ESPECIALES", font=self.font_sub,
+                 bg=BG_DARK, fg=ACCENT3).grid(row=row_offset2, column=0,
+                                               columnspan=7, pady=8,
+                                               sticky=tk.W, padx=8)
+        for i, (ch, code) in enumerate(specials):
+            row, col = divmod(i, 7)
+            cell = tk.Frame(inner, bg=BG_CARD, padx=10, pady=8)
+            cell.grid(row=row_offset2+row+1, column=col, padx=4, pady=4, sticky=tk.W+tk.E)
+            tk.Label(cell, text=ch, font=self.font_big,
+                     bg=BG_CARD, fg=ACCENT3, width=2).pack()
+            dots_frame = tk.Frame(cell, bg=BG_CARD)
+            dots_frame.pack()
+            self._render_morse_dots(dots_frame, code)
+            tk.Label(cell, text=code, font=self.font_small,
+                     bg=BG_CARD, fg=TEXT_SEC).pack()
+
         canvas.bind_all("<MouseWheel>", lambda e: canvas.yview_scroll(-1*(e.delta//120), "units"))
 #=========================================================================================================================================================================================================================================================================================================================================================================
 # Funcion de creacion de las representaciones visuales de los puntos y rayas del codigo morse para la pestaña de referencia, ademas de agregar algunas caracteristicas a estas representaciones
@@ -952,6 +971,7 @@ class MorseGame(tk.Tk):
                 else:
                     c.itemconfig(oval, fill=LED_OFF)
             self.after(80, lambda: tick(idx+1))
+        tick(0)
 #======================================================================================================================================================================================================================================================================================================================================================
 # Funciones para simular la entrada de código morse utilizando los botones en la pestaña de maqueta, estas funciones se encargan de insertar el símbolo correspondiente en el campo de texto del jugador B y actualizar la decodificación en tiempo real para mostrar el texto decodificado a medida que se ingresan los símbolos
 #======================================================================================================================================================================================================================================================================================================================================================
