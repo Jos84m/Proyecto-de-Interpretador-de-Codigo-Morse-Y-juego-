@@ -7,6 +7,7 @@ import threading                                   # Utilizamos threading para m
 import random as rnd                               # Utilizamos random con alias rnd para generar números aleatorios en la función de fondo alternativo y animación de texto morse decorativo
 import os                                          # Utilizamos os para manejar rutas de archivos, especialmente para cargar el GIF animado de fondo de la pantalla de bienvenida
 from PIL import Image, ImageTk                     # Utilizamos Pillow o PIL para manejar mejor las imágenes, especialmente para cargar y escalar el GIF animado de fondo en la pantalla de bienvenida. Si no está disponible, se intentará cargar con Tkinter nativo, aunque con menos control sobre el escalado y calidad.
+from conexion_pico import enviar_frase 
 #======================================================================================================
 # Clase de la pantalla de bienvenida
 #======================================================================================================
@@ -820,6 +821,7 @@ class MorseGame(tk.Tk):
             messagebox.showwarning("Sin frases", "Agrega frases en la pestaña FRASES.")
             return
         self.frase_actual = random.choice(self.frases)
+        enviar_frase(self.frase_actual)
         self.rondas += 1
         morse = text_to_morse(self.frase_actual)
         self.lbl_frase.config(text=self.frase_actual)
