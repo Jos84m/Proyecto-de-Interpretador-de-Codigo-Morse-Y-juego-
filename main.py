@@ -1,4 +1,6 @@
 # Zona de librerias utilizadas para la creacion de nuestra app
+import serial
+import threading
 import tkinter as tk                               # Utilizamos como base Tkinter para la interfaz grafica
 from tkinter import ttk, messagebox, font          # Utilizamos el tkk para llamar a widgets y mesagebox para mostrar mensajes emergentes, font para configurar las fuentes de texto
 import random                                      # Utilizamos random para generar frases aleatorias en el juego              
